@@ -71,6 +71,7 @@ def handle_error(s, res):
     print("* Meet an error [%d] *"%res.status)
     if res.status == 403:
         s.error_time += 1
-        if s.error_time >= len(s.token_list):
+        if s.error_time >= len(token_list):
             print("* Rate limit and wait for [%d] s... *"%s.time_inter)
             time.sleep(s.time_inter)
+            s.error_time = 0
