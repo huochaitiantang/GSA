@@ -14,7 +14,7 @@ from scrapy import Request
 
 token_list = [
 ''' Put your own token list here '''
-    ]
+]
 token_iter = itertools.cycle(token_list)
 handle_httpstatus_list = [401,403,404,451,422]
 time_inter = 1000
@@ -51,12 +51,12 @@ def get_headers(s):
 def start_requests(s):
     init_all_item(s)    
     print("---------- Index [%d] [%s] ----------"%(s.cur_item_ind, s.cur_item))
-    return [Request(get_url(s), headers=get_headers(s), callback=s.parse)]
+    return [Request(get_url(s), headers=get_headers(s), callback=s.parse, dont_filter=True)]
 
 # method for yielding the next crawl request 
 def yield_request(s):
     print("---------- Index [%d] [%s] ----------"%(s.cur_item_ind, s.cur_item))
-    return Request(get_url(s), headers=get_headers(s), callback=s.parse)
+    return Request(get_url(s), headers=get_headers(s), callback=s.parse, dont_filter=True)
 
 def do_item_parse(s, res):
     user = json.loads(res.body_as_unicode())

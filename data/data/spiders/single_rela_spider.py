@@ -14,7 +14,7 @@ from scrapy import Request
 
 token_list = [
 ''' Put your own token list here '''
- ]
+]
 token_iter = itertools.cycle(token_list)
 handle_httpstatus_list = [401,403,404,451,422]
 time_inter = 1000
@@ -25,7 +25,7 @@ def init_all_item(s):
     s.cur_item_ind = 0
     s.cur_item = s.all_item[s.cur_item_ind][s.src_key[0]]
     s.des_val[s.des_key[0]] = s.cur_item
-    #sql.delete(s.des_table, s.des_key[0], s.cur_item)
+    sql.delete(s.des_table, s.des_key[0], s.cur_item)
     s.page_num = 1
     s.rela_num = 0
     
@@ -35,7 +35,8 @@ def get_next_item(s):
         s.cur_item_ind += 1
         if s.cur_item_ind < len(s.all_item):
             s.cur_item = s.all_item[s.cur_item_ind][s.src_key[0]]
-            #sql.delete(s.des_table, s.des_key[0], s.cur_item)
+            s.des_val[s.des_key[0]] = s.cur_item
+            sql.delete(s.des_table, s.des_key[0], s.cur_item)
             s.page_num = 1
             s.rela_num = 0
         else:
@@ -59,13 +60,13 @@ def get_headers(s):
 def start_requests(s):
     init_all_item(s) 
     print("---------- Index [%d] [%s] ----------"%(s.cur_item_ind, s.cur_item))
-    return [Request(get_url(s), headers=get_headers(s), callback=s.parse)]
+    return [Request(get_url(s), headers=get_headers(s), callback=s.parse,dont_filter=True)]
 
 # method for yielding the next crawl request
 def yield_request(s):
     if s.page_num == 1:
         print("---------- Index [%d] [%s] ----------"%(s.cur_item_ind, s.cur_item))
-    return Request(get_url(s), headers=get_headers(s), callback=s.parse)
+    return Request(get_url(s), headers=get_headers(s), callback=s.parse, dont_filter=True)
 
 # method for handling the data back from the request
 def do_item_parse(s, res):
