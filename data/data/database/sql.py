@@ -1,8 +1,17 @@
 # sql operation
 # -*- coding: UTF-8 -*-
 import MySQLdb
-db = MySQLdb.connect("localhost","root","huochai123","gsa" )
-cursor = db.cursor()
+
+config = {
+	'host': 'localhost',
+	'port': 3306,
+	'user': 'root',
+	'passwd': 'huochai123',
+	'db': 'gsa',
+	'charset': 'utf8'
+}
+conn = MySQLdb.connect(**config)
+cursor = conn.cursor(cursorclass=MySQLdb.cursors.DictCursor)
 
 def create_tables():
   sqls =  [
@@ -10,18 +19,10 @@ def create_tables():
             CREATE TABLE IF NOT EXISTS user(
             login  VARCHAR(128) NOT NULL,
             id INT UNSIGNED,
-            url VARCHAR(256),
-            html_url VARCHAR(256),
-            followers_url VARCHAR(256),
-            following_url VARCHAR(256),
-            starred_url VARCHAR(256),
-            repos_url VARCHAR(256),
             type CHAR(64),
-            site_admin CHAR(10),
             name VARCHAR(128),
             company VARCHAR(128),
             location VARCHAR(128),
-            hireable CHAR(10),
             public_repos INT UNSIGNED,
             public_gists INT UNSIGNED,
             followers INT UNSIGNED,
@@ -40,16 +41,13 @@ def create_tables():
             name VARCHAR(128),
             private CHAR(10),
             fork CHAR(10),
-            url VARCHAR(256),
-            html_url VARCHAR(256),
-            stargazers_url VARCHAR(256),
             language VARCHAR(64),
             forks_count INT UNSIGNED,
             stargazers_count INT UNSIGNED,
             watchers_count INT UNSIGNED,
             size INT UNSIGNED,
             open_issues_count INT UNSIGNED,
-            push_at CHAR(64),
+            pushed_at CHAR(64),
             created_at CHAR(64),
             updated_at CHAR(64),
             spider_updated_at CHAR(64),
@@ -72,9 +70,57 @@ def create_tables():
           """
          ]
   for s in sqls:
-    print "EXECUTE CREATE TABLE : \n"+s
-    cursor.execute(s)
+    print "EXECUTE CREATE TABLE : \n" + s
+    try:
+      cursor.execute(s)
+      conn.commit()
+    except:
+      print "CREATE ERROR"
+      conn.rollback()
 
-def insert(table_name,item):
-  s = """
-	INSERT
+def drop_tables():
+  ts = ['user', 'repo', 'user_user', 'user_repo']
+  for tb in ts:
+    s = "DROP TABLE IF EXISTS %s"%(tb)
+    print "EXECUTE DROP : \n" + s
+    try:
+      cursor.execute(s)
+      conn.commit()
+    except:
+      print "DROP ERROR"
+      conn.rollback()
+
+def insert(table_name, item):
+  placeholders = ', '.join(['%s']* len(item))
+  cols = ', '.join(item.keys())
+  s =  "INSERT INTO %s ( %s ) VALUES ( %s )" % (table_name, cols, placeholders)
+  #print "EXECUTE INSERT : \n" + s
+  try:
+    cursor.execute(s, item.values())
+    conn.commit()
+  except:
+    print "INSERT ERROR"
+    conn.rollback()
+
+def delete(table_name, key, value):
+  s = "DELETE FROM %s WHERE %s = '%s'" % (table_name, key, value)
+  #print "EXECUTE DELETE : \n" + s
+  try:
+    cursor.execute(s)
+    conn.commit()
+  except:
+    print "DELETE ERROR"
+    conn.rollback()
+
+def select(table_name, keys):
+  cols = ', '.join(keys)
+  s = "SELECT DISTINCT %s FROM %s" % (cols, table_name)
+  #print "EXECUTE SELECT : \n" + s
+  try:
+    cursor.execute(s)
+    res = cursor.fetchall()
+    return res
+  except:
+    print "SELECT ERROR"
+    return None
+    
