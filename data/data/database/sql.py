@@ -2,16 +2,17 @@
 # -*- coding: UTF-8 -*-
 import MySQLdb
 
-config = {
+def get_conn():
+    config = {
 	'host': 'localhost',
 	'port': 3306,
 	'user': 'root',
 	'passwd': 'huochai123',
 	'db': 'gsa',
 	'charset': 'utf8'
-}
-conn = MySQLdb.connect(**config)
-cursor = conn.cursor(cursorclass=MySQLdb.cursors.DictCursor)
+    }
+    conn = MySQLdb.connect(**config)
+    return conn
 
 def create_tables():
   sqls =  [
@@ -69,6 +70,8 @@ def create_tables():
             )ENGINE=InnoDB DEFAULT CHARSET=utf8;
           """
          ]
+  conn = get_conn()
+  cursor = conn.cursor(cursorclass=MySQLdb.cursors.DictCursor)
   for s in sqls:
     print "EXECUTE CREATE TABLE : \n" + s
     try:
@@ -77,9 +80,13 @@ def create_tables():
     except:
       print "CREATE ERROR"
       conn.rollback()
+  cursor.close()
+  conn.close()
 
 def drop_tables():
   ts = ['user', 'repo', 'user_user', 'user_repo']
+  conn = get_conn()
+  cursor = conn.cursor(cursorclass=MySQLdb.cursors.DictCursor)
   for tb in ts:
     s = "DROP TABLE IF EXISTS %s"%(tb)
     print "EXECUTE DROP : \n" + s
@@ -89,32 +96,44 @@ def drop_tables():
     except:
       print "DROP ERROR"
       conn.rollback()
+  cursor.close()
+  conn.close()
 
 def insert(table_name, item):
   placeholders = ', '.join(['%s']* len(item))
   cols = ', '.join(item.keys())
   s =  "INSERT INTO %s ( %s ) VALUES ( %s )" % (table_name, cols, placeholders)
   #print "EXECUTE INSERT : \n" + s
+  conn = get_conn()
+  cursor = conn.cursor(cursorclass=MySQLdb.cursors.DictCursor)
   try:
     cursor.execute(s, item.values())
     conn.commit()
   except:
     print "INSERT ERROR"
     conn.rollback()
+  cursor.close()
+  conn.close()
 
 def delete(table_name, key, value):
   s = "DELETE FROM %s WHERE %s = '%s'" % (table_name, key, value)
   #print "EXECUTE DELETE : \n" + s
+  conn = get_conn()
+  cursor = conn.cursor(cursorclass=MySQLdb.cursors.DictCursor)
   try:
     cursor.execute(s)
     conn.commit()
   except:
     print "DELETE ERROR"
     conn.rollback()
+  cursor.close()
+  conn.close()
 
 def select(table_name, keys):
   cols = ', '.join(keys)
   s = "SELECT DISTINCT %s FROM %s" % (cols, table_name)
+  conn = get_conn()
+  cursor = conn.cursor(cursorclass=MySQLdb.cursors.DictCursor)
   #print "EXECUTE SELECT : \n" + s
   try:
     cursor.execute(s)
@@ -123,4 +142,6 @@ def select(table_name, keys):
   except:
     print "SELECT ERROR"
     return None
+  cursor.close()
+  conn.close()
     

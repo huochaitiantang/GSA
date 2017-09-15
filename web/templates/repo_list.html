@@ -1,0 +1,43 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>repo_list|{{ info['page'] }}</title>
+	</head>
+	<body>
+		<div>All Repos: {{ info['all_repo'] }}</div>
+		<div>Now Page: {{ info['page'] }}</div>
+		<div>Repos Per Page: {{ info['per_page'] }}</div>
+		<div>Repos This Page: {{ info['num'] }}<div>
+		
+		{% if info['page'] == 1 %}
+			<a href="page/{{ info['page'] + 1}}">Next Page</a>
+		{% endif %}
+		{% if info['page'] > 1 %}	
+			<a href="{{ info['page'] - 1}}">Pre Page</a>
+			{% if info['page'] <= info['all_repo']/info['per_page'] %}	
+				<a href="{{ info['page'] + 1}}">Next Page</a>
+			{% endif %}
+		{% endif %}
+		
+		{% if info['num'] == 0 %}
+			<div>No repos in page {{ info['page'] }}</div>
+		{% endif %}
+		<table>
+			<tr>
+				<th>Repo</th>
+				<th>Stargazers_count</th>
+				<th>Language</th>
+				<th>Size</th>
+			</tr>
+			{% for repo in repos %}
+			<tr>
+				<th><a href = "https://github.com/{{ repo['full_name'] }}">{{ repo['full_name'] }}</a></th>
+				<th>{{ repo['stargazers_count'] }}</th>
+				<th>{{ repo['language'] }}</th>
+				<th>{{ repo['size'] }}</th>
+			</tr>
+			{% endfor %}
+		</table>
+	</body>
+</html>
