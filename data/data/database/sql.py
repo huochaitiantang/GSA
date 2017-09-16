@@ -144,4 +144,39 @@ def select(table_name, keys):
     return None
   cursor.close()
   conn.close()
-    
+  
+def get_repo_language():
+  s = "SELECT DISTINCT language FROM repo ORDER BY language"
+  conn = get_conn()  
+  cursor = conn.cursor(cursorclass=MySQLdb.cursors.DictCursor)
+  try:
+    cursor.execute(s)
+    res = cursor.fetchall()
+    return res
+  except:
+    print "SELECT ERROR"
+    return None
+  cursor.close()
+  conn.close()
+
+def get_repos(language, order_type, order, keys):
+  cols = ','.join(keys)
+  s = "SELECT %s FROM repo"%(cols)
+  if language and language != 'default':
+    s += " WHERE language = '%s'"%(language)
+  if order_type and order_type != 'default':
+    s += " ORDER BY %s"%(order_type)
+    if order == 'down':
+      s += " DESC"
+  print s
+  conn = get_conn()  
+  cursor = conn.cursor(cursorclass=MySQLdb.cursors.DictCursor)
+  try:
+    cursor.execute(s)
+    res = cursor.fetchall()
+    return res
+  except:
+    print "SELECT ERROR"
+    return None
+  cursor.close()
+

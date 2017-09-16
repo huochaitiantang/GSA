@@ -9,20 +9,44 @@
 		<div>Now Page: {{ info['page'] }}</div>
 		<div>Repos Per Page: {{ info['per_page'] }}</div>
 		<div>Repos This Page: {{ info['num'] }}<div>
+
+		<form method="GET" >
+			Order by:
+			<select name="order_type">
+				<option value="default">Default</option>
+				{% for or in info['all_order_type'] %}
+
+				
+				<option value="{{ or }}" {% if or == info['order_type'] %} selected="selected" {% endif %}>{{ or }}</option>
+				{% endfor %}	
+			</select>
+			<input type="radio" name="order" value="up" {% if info['order'] == 'up' %} checked="checked"{% endif %}/> Up
+			<input type="radio" name="order" value="down" {% if info['order'] == 'down' %} checked="checked" {% endif %}/> Down
+			<br/>
+			Language:
+			<select name="language">
+				<option value="default">Default</option>
+				{% for lan in info['all_language'] %}
+					<option value="{{ lan }}" {% if lan == info['language'] %} selected="selected" {% endif %}>{{ lan }}</option>
+					
+
+				{% endfor %}
+			</select>
+			<br/><input type="submit" value="Filter">
+		</form>
+
 		
-		{% if info['page'] == 1 %}
-			<a href="page/{{ info['page'] + 1}}">Next Page</a>
-		{% endif %}
-		{% if info['page'] > 1 %}	
-			<a href="{{ info['page'] - 1}}">Pre Page</a>
-			{% if info['page'] <= info['all_repo']/info['per_page'] %}	
-				<a href="{{ info['page'] + 1}}">Next Page</a>
+		{% if info['page'] < info['lst_page'] %}
+			{% if info['page'] == 1 %}
+				<a href="page/{{ info['page'] + 1}}?order_type={{info['order_type']}}&order={{info['order']}}&&language={{info['language']}}">Next Page</a>
+			{% else %}
+			<a href="{{ info['page'] + 1}}?order_type={{info['order_type']}}&order={{info['order']}}&&language={{info['language']}}">Next Page</a>
 			{% endif %}
 		{% endif %}
-		
-		{% if info['num'] == 0 %}
-			<div>No repos in page {{ info['page'] }}</div>
+		{% if info['page'] > 1 %}	
+			<a href="{{ info['page'] - 1}}?order_type={{info['order_type']}}&order={{info['order']}}&&language={{info['language']}}">Pre Page</a>
 		{% endif %}
+		
 		<table>
 			<tr>
 				<th>Repo</th>
