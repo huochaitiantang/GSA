@@ -187,17 +187,23 @@ def get_users(company, location, order_type, order, keys):
   cols = ','.join(keys)
   params = []
   s = "SELECT %s FROM user"%(cols)
-  company = "%" + re.sub("/W","%",company) + "%"
-  location = "%" + re.sub("/W","%",location) + "%"
-  s += " WHERE company LIKE %s"
-  params.append(company)
-  s += "AND location LIKE %s"
-  params.append(location)
+  if company and len(company) > 0:
+    company = "%" + re.sub("/W","%",company) + "%"
+    s += " WHERE company LIKE %s"
+    params.append(company)
+  if location and len(location) > 0:
+    location = "%" + re.sub("/W","%",location) + "%"
+    if company and len(company) > 0:
+      s += " AND"
+    else:
+      s += " WHERE"
+    s += " location LIKE %s"
+    params.append(location)
   if order_type and order_type != 'default':
     s += " ORDER BY %s"%(order_type)
     if order == 'down':
       s += " DESC"
-  #print s,params
+  print s,params
   conn = get_conn()  
   cursor = conn.cursor(cursorclass=MySQLdb.cursors.DictCursor)
   try:
