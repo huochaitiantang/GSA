@@ -15,8 +15,6 @@
 			<select name="order_type">
 				<option value="default">Default</option>
 				{% for or in info['all_order_type'] %}
-
-				
 				<option value="{{ or }}" {% if or == info['order_type'] %} selected="selected" {% endif %}>{{ or }}</option>
 				{% endfor %}	
 			</select>
@@ -35,16 +33,12 @@
 			<br/><input type="submit" value="Filter">
 		</form>
 
+		{% if info['page'] > 1 %}	
+			<a href="/repos/page/{{ info['page'] - 1}}?order_type={{info['order_type']}}&order={{info['order']}}&&language={{info['language']}}">Pre Page</a>
+		{% endif %}
 		
 		{% if info['page'] < info['lst_page'] %}
-			{% if info['page'] == 1 %}
-				<a href="page/{{ info['page'] + 1}}?order_type={{info['order_type']}}&order={{info['order']}}&&language={{info['language']}}">Next Page</a>
-			{% else %}
-			<a href="{{ info['page'] + 1}}?order_type={{info['order_type']}}&order={{info['order']}}&&language={{info['language']}}">Next Page</a>
-			{% endif %}
-		{% endif %}
-		{% if info['page'] > 1 %}	
-			<a href="{{ info['page'] - 1}}?order_type={{info['order_type']}}&order={{info['order']}}&&language={{info['language']}}">Pre Page</a>
+			<a href="/repos/page/{{ info['page'] + 1}}?order_type={{info['order_type']}}&order={{info['order']}}&&language={{info['language']}}">Next Page</a>
 		{% endif %}
 		
 		<table>

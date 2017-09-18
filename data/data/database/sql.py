@@ -1,6 +1,7 @@
 # sql operation
 # -*- coding: UTF-8 -*-
 import MySQLdb
+import re
 
 def get_conn():
     config = {
@@ -162,8 +163,10 @@ def get_repo_language():
 def get_repos(language, order_type, order, keys):
   cols = ','.join(keys)
   s = "SELECT %s FROM repo"%(cols)
-  if language and language != 'default':
+  if language and language != 'default' and language != 'None':
     s += " WHERE language = '%s'"%(language)
+  if language and language == 'None':
+    s += " WHERE language is NULL"
   if order_type and order_type != 'default':
     s += " ORDER BY %s"%(order_type)
     if order == 'down':
@@ -173,6 +176,32 @@ def get_repos(language, order_type, order, keys):
   cursor = conn.cursor(cursorclass=MySQLdb.cursors.DictCursor)
   try:
     cursor.execute(s)
+    res = cursor.fetchall()
+    return res
+  except:
+    print "SELECT ERROR"
+    return None
+  cursor.close()
+
+def get_users(company, location, order_type, order, keys):
+  cols = ','.join(keys)
+  params = []
+  s = "SELECT %s FROM user"%(cols)
+  company = "%" + re.sub("/W","%",company) + "%"
+  location = "%" + re.sub("/W","%",location) + "%"
+  s += " WHERE company LIKE %s"
+  params.append(company)
+  s += "AND location LIKE %s"
+  params.append(location)
+  if order_type and order_type != 'default':
+    s += " ORDER BY %s"%(order_type)
+    if order == 'down':
+      s += " DESC"
+  #print s,params
+  conn = get_conn()  
+  cursor = conn.cursor(cursorclass=MySQLdb.cursors.DictCursor)
+  try:
+    cursor.execute(s,params)
     res = cursor.fetchall()
     return res
   except:

@@ -10,28 +10,51 @@
 		<div>Users Per Page: {{ info['per_page'] }}</div>
 		<div>Users This Page: {{ info['num'] }}<div>
 		
-		{% if info['page'] == 1 %}
-			<a href="page/{{ info['page'] + 1}}">Next Page</a>
-		{% endif %}
+		<form method="GET" >
+			Order by:
+			<select name="order_type">
+				<option value="default">Default</option>
+				{% for or in info['all_order_type'] %}
+				<option value="{{ or }}" {% if or == info['order_type'] %} selected="selected" {% endif %}>{{ or }}</option>
+				{% endfor %}	
+			</select>
+			<input type="radio" name="order" value="up" {% if info['order'] == 'up' %} checked="checked"{% endif %}/> Up
+			<input type="radio" name="order" value="down" {% if info['order'] == 'down' %} checked="checked" {% endif %}/> Down
+			<br/>
+			Company:<input type="text" name="company" value="{{info['company']}}">
+			Location:<input type="text" name="location" value="{{info['location']}}">
+			
+			<br/><input type="submit" value="Filter">
+		</form>
+
+
+
+
 		{% if info['page'] > 1 %}	
-			<a href="{{ info['page'] - 1}}">Pre Page</a>
-			{% if info['page'] <= info['all_user']/info['per_page'] %}	
-				<a href="{{ info['page'] + 1}}">Next Page</a>
-			{% endif %}
+			<a href="/users/page/{{ info['page'] - 1}}?order_type={{info['order_type']}}&order={{info['order']}}&&company={{info['company']}}&&location={{info['location']}}">Pre Page</a>
+		{% endif %}
+
+		{% if info['page'] < info['lst_page'] %}
+			<a href="/users/page/{{ info['page'] + 1}}?order_type={{info['order_type']}}&order={{info['order']}}&&company={{info['company']}}&&location={{info['location']}}">Next Page</a>
 		{% endif %}
 		
-		{% if info['num'] == 0 %}
-			<div>No users in page {{ info['page'] }}</div>
-		{% endif %}
 		<table>
 			<tr>
 				<th>User</th>
+				<th>Public_repos</th>
+				<th>Public_gists</th>
 				<th>Followers</th>
+				<th>Company</th>
+				<th>Location</th>
 			</tr>
 			{% for user in users %}
 			<tr>
 				<th><a href = "https://github.com/{{ user['login'] }}">{{ user['login'] }}</a></th>
+				<th>{{ user['public_repos'] }}</th>
+				<th>{{ user['public_gists'] }}</th>
 				<th>{{ user['followers'] }}</th>
+				<th>{{ user['company'] }}</th>
+				<th>{{ user['location'] }}</th>
 			</tr>
 			{% endfor %}
 		</table>
