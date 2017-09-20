@@ -139,12 +139,12 @@ def select(table_name, keys):
   try:
     cursor.execute(s)
     res = cursor.fetchall()
-    return res
   except:
     print "SELECT ERROR"
-    return None
+    res = None
   cursor.close()
   conn.close()
+  return res
   
 def get_repo_language():
   s = "SELECT DISTINCT language FROM repo ORDER BY language"
@@ -153,12 +153,12 @@ def get_repo_language():
   try:
     cursor.execute(s)
     res = cursor.fetchall()
-    return res
   except:
     print "SELECT ERROR"
-    return None
+    res = None
   cursor.close()
   conn.close()
+  return res
 
 def get_repos(name, language, order_type, order, keys):
   cols = ','.join(keys)
@@ -187,11 +187,12 @@ def get_repos(name, language, order_type, order, keys):
   try:
     cursor.execute(s,params)
     res = cursor.fetchall()
-    return res
   except:
     print "SELECT ERROR"
-    return None
+    res = None
   cursor.close()
+  conn.close()
+  return res
 
 def get_users(name, company, location, order_type, order, keys):
   cols = ','.join(keys)
@@ -227,9 +228,102 @@ def get_users(name, company, location, order_type, order, keys):
   try:
     cursor.execute(s,params)
     res = cursor.fetchall()
-    return res
   except:
     print "SELECT ERROR"
-    return None
+    res = None
   cursor.close()
+  conn.close()
+  return res
+
+def get_gaps(table_name, key):
+  ind = 'MAX(%s)'%(key)
+  s = "SELECT %s FROM %s"%(ind,table_name)
+  conn = get_conn()  
+  cursor = conn.cursor(cursorclass=MySQLdb.cursors.DictCursor)
+  try:
+    cursor.execute(s)
+    max_num = int(cursor.fetchall()[0][ind])
+  except:
+    print "SELECT ERROR"
+    max_num = 0
+  max_gap = max_num/20
+  min_gap = (max_num/300/100)*100
+  gap_gap = ((max_gap-min_gap)/20)/100*100
+  print max_num,min_gap,max_gap,gap_gap
+  ans = []
+  ans.append(min_gap)
+  for i in range(1,20):
+    x = ans[i-1] + gap_gap
+    ans.append(x)
+  cursor.close()
+  conn.close()
+  return ans 
+
+def get_num_by_group(table_name, key):
+  conn = get_conn()  
+  cursor = conn.cursor(cursorclass=MySQLdb.cursors.DictCursor)
+  s = "SELECT DISTINCT %s FROM %s ORDER BY %s"%(key,table_name,key)
+  try:
+    cursor.execute(s)
+    res = cursor.fetchall()
+  except:
+    print "SELECT ERROR"
+    res = ()
+  ans = []
+  for r in res:
+    cur = dict()
+    if r[key] is None:
+      cur['key'] = 'None'
+      s = "SELECT COUNT(*) FROM %s WHERE %s is NULL"%(table_name,key)
+    else: 
+      cur['key'] = r[key]
+      s = "SELECT COUNT(*) FROM %s WHERE %s = '%s'"%(table_name,key,r[key])
+    try:
+      cursor.execute(s)
+      cur['val'] = int(cursor.fetchall()[0]['COUNT(*)'])
+    except:
+      cur['val'] = 0
+    ans.append(cur)
+  cursor.close()
+  conn.close()
+  return sorted(ans, key = lambda x:x['val'], reverse=True)
+
+def get_num_by_gap(table_name,key,gap):
+  conn = get_conn()  
+  cursor = conn.cursor(cursorclass=MySQLdb.cursors.DictCursor)
+  ind = 'MAX(%s)'%(key)
+  s = "SELECT %s FROM %s"%(ind,table_name)
+  try:
+    cursor.execute(s)
+    max_num = int(cursor.fetchall()[0][ind])
+  except:
+    print "SELECT ERROR"
+    max_num = 0
+  ans = []
+  pre = 0
+  k = gap
+  while True:
+    cur = dict()    
+    cur['key'] = str(pre)+'-'+str(k)
+    s = "SELECT COUNT(*) FROM %s WHERE %s >= %d and %s < %d"%(table_name,key,pre,key,k)
+    print s
+    try:
+      cursor.execute(s)
+      cur['val'] = int(cursor.fetchall()[0]['COUNT(*)'])
+    except:
+      print "SELECT ERROR"
+      cur['val'] = 0
+    ans.append(cur)
+    if k > max_num:
+      break
+    pre = k
+    k = k * gap
+  cursor.close()
+  conn.close()
+  return ans
+
+
+
+
+
 

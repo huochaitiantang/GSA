@@ -16,5 +16,9 @@ def users(page):
 def repos_list(page):
     return controller.do_repos(page)
 
+@app.route('/repos/statistics/')
+def repos_statistics():
+    return controller.do_repos_statistics()
+
 if __name__ == '__main__':
     app.run(debug=True)

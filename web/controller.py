@@ -107,3 +107,28 @@ def do_repos(page):
     info['order'] = order
     info['name'] = name
     return flask.render_template('repo_list.html', info = info, repos = repos)
+
+
+def do_repos_statistics():
+    stype =  request.args.get('type')
+    gap = request.args.get('gap')
+    #star_gaps = sql.get_gaps('repo','stargazers_count')
+    #size_gaps = sql.get_gaps('repo','size')
+    if gap:
+        gap = int(gap)
+    star_gaps = [2,3,4,5,10]
+    size_gaps = [2,3,4,5,10]
+    print star_gaps
+    print size_gaps
+    if stype is None:
+        stype = 'language'
+    if stype == 'stargazers_count' and (gap is None or gap not in star_gaps):
+        gap = star_gaps[len(star_gaps)-1]
+    if stype == 'size' and (gap is None or gap not in size_gaps):
+        gap = size_gaps[len(size_gaps)-1]
+    if stype == 'language':
+        key_val = sql.get_num_by_group('repo','language')
+        print key_val
+    else:
+        key_val = sql.get_num_by_gap('repo',stype,gap)
+        print key_val
