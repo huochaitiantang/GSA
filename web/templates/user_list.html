@@ -21,6 +21,7 @@
 			<input type="radio" name="order" value="up" {% if info['order'] == 'up' %} checked="checked"{% endif %}/> Up
 			<input type="radio" name="order" value="down" {% if info['order'] == 'down' %} checked="checked" {% endif %}/> Down
 			<br/>
+			Name:<input type="text" name="name" value="{{info['name']}}">
 			Company:<input type="text" name="company" value="{{info['company']}}">
 			Location:<input type="text" name="location" value="{{info['location']}}">
 			
@@ -31,11 +32,11 @@
 
 
 		{% if info['page'] > 1 %}	
-			<a href="/users/page/{{ info['page'] - 1}}?order_type={{info['order_type']}}&order={{info['order']}}&&company={{info['company']}}&&location={{info['location']}}">Pre Page</a>
+			<a href="/users/page/{{ info['page'] - 1}}?order_type={{info['order_type']}}&order={{info['order']}}&&company={{info['company']}}&&location={{info['location']}}&&name={{info['name']}}">Pre Page</a>
 		{% endif %}
 
 		{% if info['page'] < info['lst_page'] %}
-			<a href="/users/page/{{ info['page'] + 1}}?order_type={{info['order_type']}}&order={{info['order']}}&&company={{info['company']}}&&location={{info['location']}}">Next Page</a>
+			<a href="/users/page/{{ info['page'] + 1}}?order_type={{info['order_type']}}&order={{info['order']}}&&company={{info['company']}}&&location={{info['location']}}&&name={{info['name']}}">Next Page</a>
 		{% endif %}
 		
 		<table>

@@ -10,6 +10,7 @@ def do_users(page):
     location = request.args.get('location')
     order_type = request.args.get('order_type')
     order = request.args.get('order')
+    name = request.args.get('name')
     if company is None:
         company = ''
     if location is None:
@@ -18,7 +19,9 @@ def do_users(page):
         order_type = 'default'
     if order is None:
         order = 'up'
-    users_res = sql.get_users(company,location,order_type,order,['login','company','location','public_repos','public_gists','followers'])
+    if name is None:
+        name = ''
+    users_res = sql.get_users(name,company,location,order_type,order,['login','company','location','public_repos','public_gists','followers'])
     if users_res:
         users_num = len(users_res)
     else:
@@ -28,10 +31,10 @@ def do_users(page):
     if users_num % per_page == 0:
         x = 1
     if page < 1:
-        return flask.redirect('/users/page/1?order_type=%s&order=%s&company=%s&location=%s'%(order_type,order,company,location))
+        return flask.redirect('/users/page/1?order_type=%s&order=%s&company=%s&location=%s&name=%s'%(order_type,order,company,location,name))
     lst_page = int(users_num/per_page) + 1 - x
     if lst_page > 0 and page > lst_page:
-        return flask.redirect('/users/page/%d?order_type=%s&order=%s&company=%s&location=%s'%(lst_page,order_type,order,company,location))
+        return flask.redirect('/users/page/%d?order_type=%s&order=%s&company=%s&location=%s&name=%s'%(lst_page,order_type,order,company,location,name))
     users = []
     for i in range((page-1)*per_page, page*per_page):
         if users_res and i < users_num and i >=0:
@@ -47,6 +50,7 @@ def do_users(page):
     info['location'] = location
     info['order_type'] = order_type
     info['order'] = order
+    info['name'] = name
     #print users
     return flask.render_template('user_list.html', info = info, users = users)
 
@@ -56,13 +60,16 @@ def do_repos(page):
     lan = request.args.get('language')
     order_type = request.args.get('order_type')
     order = request.args.get('order')
+    name = request.args.get('name')
     if lan is None:
         lan = 'default'
     if order_type is None:
         order_type = 'default'
     if order is None:
         order = 'up'
-    repos_res = sql.get_repos(lan,order_type,order,['full_name','stargazers_count','language','size'])
+    if name is None:
+        name = ''
+    repos_res = sql.get_repos(name,lan,order_type,order,['full_name','stargazers_count','language','size'])
     if repos_res:
         repos_num = len(repos_res)
     else:
@@ -73,9 +80,9 @@ def do_repos(page):
         x = 1
     lst_page = int(repos_num/per_page) + 1 - x
     if page < 1:
-        return flask.redirect('/repos/page/1?order_type=%s&order=%s&language=%s'%(order_type, order, lan))
+        return flask.redirect('/repos/page/1?order_type=%s&order=%s&language=%s&name=%s'%(order_type, order, lan, name))
     if lst_page > 0 and page > lst_page:
-        return flask.redirect('/repos/page/%d?order_type=%s&order=%s&language=%s'%(lst_page, order_type, order, lan))
+        return flask.redirect('/repos/page/%d?order_type=%s&order=%s&language=%s&name=%s'%(lst_page, order_type, order, lan,name))
     repos_lan_res = sql.get_repo_language()
     repos = []
     repos_lan = []
@@ -98,4 +105,5 @@ def do_repos(page):
     info['language'] = lan
     info['order_type'] = order_type
     info['order'] = order
+    info['name'] = name
     return flask.render_template('repo_list.html', info = info, repos = repos)

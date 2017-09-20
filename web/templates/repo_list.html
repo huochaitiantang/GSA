@@ -30,15 +30,17 @@
 
 				{% endfor %}
 			</select>
+			<br/>
+			Name:<input type="text" name="name" value="{{info['name']}}">
 			<br/><input type="submit" value="Filter">
 		</form>
 
 		{% if info['page'] > 1 %}	
-			<a href="/repos/page/{{ info['page'] - 1}}?order_type={{info['order_type']}}&order={{info['order']}}&&language={{info['language']}}">Pre Page</a>
+			<a href="/repos/page/{{ info['page'] - 1}}?order_type={{info['order_type']}}&order={{info['order']}}&&language={{info['language']}}&&name={{info['name']}}">Pre Page</a>
 		{% endif %}
 		
 		{% if info['page'] < info['lst_page'] %}
-			<a href="/repos/page/{{ info['page'] + 1}}?order_type={{info['order_type']}}&order={{info['order']}}&&language={{info['language']}}">Next Page</a>
+			<a href="/repos/page/{{ info['page'] + 1}}?order_type={{info['order_type']}}&order={{info['order']}}&&language={{info['language']}}&&name={{info['name']}}">Next Page</a>
 		{% endif %}
 		
 		<table>

@@ -160,13 +160,23 @@ def get_repo_language():
   cursor.close()
   conn.close()
 
-def get_repos(language, order_type, order, keys):
+def get_repos(name, language, order_type, order, keys):
   cols = ','.join(keys)
   s = "SELECT %s FROM repo"%(cols)
-  if language and language != 'default' and language != 'None':
-    s += " WHERE language = '%s'"%(language)
-  if language and language == 'None':
-    s += " WHERE language is NULL"
+  params = []
+  if language and language != 'default':
+    if language != 'None':
+      s += " WHERE language = '%s'"%(language)
+    else:
+      s += " WHERE language is NULL"
+  if name and len(name) > 0:
+    if language and language != 'default':
+      s += " AND"
+    else:
+      s += " WHERE"
+    name = "%" + re.sub("/W","%",name) + "%"
+    s += " full_name LIKE %s"
+    params.append(name)
   if order_type and order_type != 'default':
     s += " ORDER BY %s"%(order_type)
     if order == 'down':
@@ -175,7 +185,7 @@ def get_repos(language, order_type, order, keys):
   conn = get_conn()  
   cursor = conn.cursor(cursorclass=MySQLdb.cursors.DictCursor)
   try:
-    cursor.execute(s)
+    cursor.execute(s,params)
     res = cursor.fetchall()
     return res
   except:
@@ -183,17 +193,25 @@ def get_repos(language, order_type, order, keys):
     return None
   cursor.close()
 
-def get_users(company, location, order_type, order, keys):
+def get_users(name, company, location, order_type, order, keys):
   cols = ','.join(keys)
   params = []
   s = "SELECT %s FROM user"%(cols)
+  if name and len(name) > 0:
+    name = "%" + re.sub("/W","%",name) + "%"
+    s += " WHERE login LIKE %s"
+    params.append(name)
   if company and len(company) > 0:
     company = "%" + re.sub("/W","%",company) + "%"
-    s += " WHERE company LIKE %s"
+    if name and len(name) > 0:
+      s += " AND"
+    else:
+      s += " WHERE"
+    s += " company LIKE %s"
     params.append(company)
   if location and len(location) > 0:
     location = "%" + re.sub("/W","%",location) + "%"
-    if company and len(company) > 0:
+    if (name and len(name)) or (company and len(company) > 0):
       s += " AND"
     else:
       s += " WHERE"
