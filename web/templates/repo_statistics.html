@@ -1,0 +1,31 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>repo_statistics</title>
+	</head>
+	<body>
+
+		<form method="GET" >
+			<input type="radio" name="type" value="language" {% if info['type'] == 'language' %} checked="checked"{% endif %}>Language
+			<br/>
+			<input type="radio" name="type" value="stargazers_count" {% if info['type'] == 'stargazers_count' %} checked="checked"{% endif %}>Stargazers_count
+			<select name="star_gap">
+					{% for sg in info['star_gaps'] %}
+					<option value="{{ sg }}" {% if sg == info['star_gap'] %} selected="selected" {% endif %}>{{ sg }}</option>
+					{% endfor %}
+			</select>
+			<br/>
+			<input type="radio" name="type" value="size" {% if info['type'] == 'size' %} checked="checked"{% endif %}>Size
+			<select name="size_gap">
+					{% for sg in info['size_gaps'] %}
+					<option value="{{ sg }}" {% if sg == info['size_gap'] %} selected="selected" {% endif %}>{{ sg }}</option>
+					{% endfor %}
+			</select>
+			</br><input type="submit" value="Filter">
+
+
+		</form>
+
+	</body>
+</html>

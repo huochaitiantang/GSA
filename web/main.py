@@ -20,5 +20,9 @@ def repos_list(page):
 def repos_statistics():
     return controller.do_repos_statistics()
 
+@app.route('/repos/statistics/msg')
+def repos_statistics_msg():
+    return controller.do_repos_statistics_msg()
+
 if __name__ == '__main__':
     app.run(debug=True)

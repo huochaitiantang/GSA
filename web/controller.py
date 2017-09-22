@@ -110,16 +110,36 @@ def do_repos(page):
 
 
 def do_repos_statistics():
+    stype = request.args.get('type')
+    star_gap = request.args.get('star_gap')
+    size_gap = request.args.get('size_gap')
+    star_gaps = [2,3,4,5,10]
+    size_gaps = [2,3,4,5,10]
+    if star_gap:
+        star_gap = int(star_gap)
+        if star_gap not in star_gaps:
+            star_gap = star_gaps[len(star_gaps)-1]
+    if size_gap:
+        size_gap = int(size_gap)
+        if size_gap not in size_gaps:
+            size_gap = size_gaps[len(szie_gaps)-1]
+    if stype is None:
+        stype = 'language'
+    info = dict()
+    info['type'] = stype
+    info['star_gap'] = star_gap
+    info['size_gap'] = size_gap
+    info['star_gaps'] = star_gaps
+    info['size_gaps'] = size_gaps
+    return flask.render_template('repo_statistics.html',info=info)
+
+def do_repos_statistics_msg():
     stype =  request.args.get('type')
     gap = request.args.get('gap')
-    #star_gaps = sql.get_gaps('repo','stargazers_count')
-    #size_gaps = sql.get_gaps('repo','size')
     if gap:
         gap = int(gap)
     star_gaps = [2,3,4,5,10]
     size_gaps = [2,3,4,5,10]
-    print star_gaps
-    print size_gaps
     if stype is None:
         stype = 'language'
     if stype == 'stargazers_count' and (gap is None or gap not in star_gaps):
