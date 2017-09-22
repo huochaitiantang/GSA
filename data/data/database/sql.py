@@ -8,7 +8,7 @@ def get_conn():
 	'host': 'localhost',
 	'port': 3306,
 	'user': 'root',
-	'passwd': 'huochai123',
+	'passwd': 'huochai',
 	'db': 'gsa',
 	'charset': 'utf8'
     }
@@ -288,7 +288,7 @@ def get_num_by_group(table_name, key):
   conn.close()
   return sorted(ans, key = lambda x:x['val'], reverse=True)
 
-def get_num_by_gap(table_name,key,gap):
+def get_num_by_gap(table_name,key,gap,equalgap):
   conn = get_conn()  
   cursor = conn.cursor(cursorclass=MySQLdb.cursors.DictCursor)
   ind = 'MAX(%s)'%(key)
@@ -317,10 +317,16 @@ def get_num_by_gap(table_name,key,gap):
     if k > max_num:
       break
     pre = k
-    k = k * gap
+    if equalgap:
+        k = k + gap
+    else:
+        k = k * gap
   cursor.close()
   conn.close()
   return ans
+
+
+
 
 
 

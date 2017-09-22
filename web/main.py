@@ -24,5 +24,13 @@ def repos_statistics():
 def repos_statistics_msg():
     return controller.do_repos_statistics_msg()
 
+@app.route('/users/statistics/')
+def users_statistics():
+    return controller.do_users_statistics()
+
+@app.route('/users/statistics/msg')
+def users_statistics_msg():
+    return controller.do_users_statistics_msg()
+
 if __name__ == '__main__':
     app.run(debug=True)

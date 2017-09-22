@@ -117,14 +117,16 @@ def do_repos_statistics():
     size_gap = request.args.get('size_gap')
     star_gaps = [2,3,4,5,10]
     size_gaps = [2,3,4,5,10]
+    #star_gaps = sql.get_gaps('repo','stargazers_count')
+    #size_gaps = sql.get_gaps('repo','size')
     if star_gap:
         star_gap = int(star_gap)
-        if star_gap not in star_gaps:
-            star_gap = star_gaps[len(star_gaps)-1]
+    if star_gap not in star_gaps:
+            star_gap = star_gaps[0]
     if size_gap:
         size_gap = int(size_gap)
-        if size_gap not in size_gaps:
-            size_gap = size_gaps[len(szie_gaps)-1]
+    if size_gap not in size_gaps:
+            size_gap = size_gaps[0]
     if stype is None:
         stype = 'language'
     info = dict()
@@ -141,29 +143,78 @@ def do_repos_statistics_msg():
     size_gap = request.args.get('size_gap')
     star_gaps = [2,3,4,5,10]
     size_gaps = [2,3,4,5,10]
+    #star_gaps = sql.get_gaps('repo','stargazers_count')
+    #size_gaps = sql.get_gaps('repo','size')
     if star_gap:
         star_gap = int(star_gap)
-        if star_gap not in star_gaps:
-            star_gap = star_gaps[len(star_gaps)-1]
+    if star_gap not in star_gaps:
+            star_gap = star_gaps[0]
     if size_gap:
         size_gap = int(size_gap)
-        if size_gap not in size_gaps:
-            size_gap = size_gaps[len(szie_gaps)-1]
+    if size_gap not in size_gaps:
+            size_gap = size_gaps[0]
     if stype is None:
         stype = 'language'
-
-    if stype == 'language':
-        key_val = sql.get_num_by_group('repo','language')
-        print key_val
-    elif stype == 'stargazers_count':
-        key_val = sql.get_num_by_gap('repo',stype,star_gap)
-        print key_val
-    else:
-        key_val = sql.get_num_by_gap('repo',stype,size_gap)
-        print key_val
     ans = {
         'type':'Response',
         'timestamp': int(time.time() * 1000)
     }
-    ans['key_val'] = key_val
+    #equalgap = True
+    equalgap = False
+    if stype == 'language':
+        ans['key_val'] = sql.get_num_by_group('repo','language')
+    elif stype == 'stargazers_count':
+        ans['key_val'] = sql.get_num_by_gap('repo',stype,star_gap,equalgap)
+    elif stype == 'size':
+        ans['key_val'] = sql.get_num_by_gap('repo',stype,size_gap,equalgap)
+    else:
+        print "ERROR"
+    return json.dumps(ans)
+
+def do_users_statistics():
+    stype = request.args.get('type')
+    gap = dict()
+    gaps = dict()
+    keys = ['followers_gap','public_repos_gap','public_gists_gap']
+    for k in keys:
+        gap[k] = request.args.get(k)
+        gaps[k] = [2,3,4,5,10]
+        if gap[k]:
+            gap[k] = int(gap[k])
+        if gap[k] not in gaps[k]:
+            gap[k] = gaps[k][0]
+    print gap
+    if stype is None:
+        stype = 'followers'
+    info = dict()
+    info['type'] = stype
+    for k in keys:
+        info[k] = gap[k]
+        info[k+'s'] = gaps[k]
+    print info
+    return flask.render_template('user_statistics.html',info=info)
+
+def do_users_statistics_msg():
+    stype = request.args.get('type')
+    gap = dict()
+    gaps = dict()
+    keys = ['followers_gap','public_repos_gap','public_gists_gap']
+    for k in keys:
+        gap[k] = request.args.get(k)
+        gaps[k] = [2,3,4,5,10]
+        if gap[k]:
+            gap[k] = int(gap[k])
+        if gap[k] not in gaps[k]:
+            gap[k] = gaps[k][0]
+    if stype is None:
+        stype = 'followers'
+    ans = {
+        'type':'Response',
+        'timestamp': int(time.time() * 1000)
+    }
+    #equalgap = True
+    equalgap = False
+    for k in keys:
+        if stype+'_gap' == k:
+            ans['key_val'] = sql.get_num_by_gap('user',stype,gap[k],equalgap)
     return json.dumps(ans)

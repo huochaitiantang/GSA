@@ -72,7 +72,7 @@ function draw(key_val, canvas_all){
 	canvas.fillStyle='#f1f1f1';
 	canvas.fillRect(0,0,width,height);
 	
-	rs = get_r(key_val,height/2)
+	rs = get_r(key_val,height/2.75)
 	xy = get_xy(rs)
 	//console.log(rs)
 	//console.log(xy)	
