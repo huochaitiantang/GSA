@@ -3,6 +3,8 @@ sys.path.append('../')
 from data.data.database import sql
 import flask
 from flask import request
+import time
+import json
 
 # show all users
 def do_users(page):
@@ -134,21 +136,34 @@ def do_repos_statistics():
     return flask.render_template('repo_statistics.html',info=info)
 
 def do_repos_statistics_msg():
-    stype =  request.args.get('type')
-    gap = request.args.get('gap')
-    if gap:
-        gap = int(gap)
+    stype = request.args.get('type')
+    star_gap = request.args.get('star_gap')
+    size_gap = request.args.get('size_gap')
     star_gaps = [2,3,4,5,10]
     size_gaps = [2,3,4,5,10]
+    if star_gap:
+        star_gap = int(star_gap)
+        if star_gap not in star_gaps:
+            star_gap = star_gaps[len(star_gaps)-1]
+    if size_gap:
+        size_gap = int(size_gap)
+        if size_gap not in size_gaps:
+            size_gap = size_gaps[len(szie_gaps)-1]
     if stype is None:
         stype = 'language'
-    if stype == 'stargazers_count' and (gap is None or gap not in star_gaps):
-        gap = star_gaps[len(star_gaps)-1]
-    if stype == 'size' and (gap is None or gap not in size_gaps):
-        gap = size_gaps[len(size_gaps)-1]
+
     if stype == 'language':
         key_val = sql.get_num_by_group('repo','language')
         print key_val
-    else:
-        key_val = sql.get_num_by_gap('repo',stype,gap)
+    elif stype == 'stargazers_count':
+        key_val = sql.get_num_by_gap('repo',stype,star_gap)
         print key_val
+    else:
+        key_val = sql.get_num_by_gap('repo',stype,size_gap)
+        print key_val
+    ans = {
+        'type':'Response',
+        'timestamp': int(time.time() * 1000)
+    }
+    ans['key_val'] = key_val
+    return json.dumps(ans)
