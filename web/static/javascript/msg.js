@@ -18,7 +18,8 @@ function get_r(key_val,max_r){
 	return r
 }
 
-var seed_s = 1
+//var seed_s = 1
+var seed_s = Number(new Date())
 function get_random(min_num,max_num){
 	seed_s = ( seed_s * 9301 + 49297 ) % 233280;
 	var x = ( seed_s * 9301 + 49297 ) % 233280/233280.0 ;
@@ -28,7 +29,7 @@ function get_random(min_num,max_num){
 	return x;
 }
 
-var width = 1200
+var width = window.innerWidth
 var height = 640
 var border = 5
 
@@ -67,7 +68,7 @@ var color = new Array("220,20,60","255,105,180","255,0,0","255,165,0","255,222,1
 function draw(key_val, canvas_all){
 	canvas_all.width = width; 
 	canvas_all.height = height; 
-	
+
 	var canvas = canvas_all.getContext('2d');
 	canvas.fillStyle='#f1f1f1';
 	canvas.fillRect(0,0,width,height);

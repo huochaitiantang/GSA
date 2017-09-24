@@ -6,6 +6,9 @@ from flask import request
 import time
 import json
 
+def do_home():
+    return flask.render_template('home.html',nav='home')
+
 # show all users
 def do_users(page):
     company = request.args.get('company')
@@ -54,7 +57,7 @@ def do_users(page):
     info['order'] = order
     info['name'] = name
     #print users
-    return flask.render_template('user_list.html', info = info, users = users)
+    return flask.render_template('user_list.html', info = info, users = users, nav='users')
 
 
 # show all repos
@@ -108,7 +111,7 @@ def do_repos(page):
     info['order_type'] = order_type
     info['order'] = order
     info['name'] = name
-    return flask.render_template('repo_list.html', info = info, repos = repos)
+    return flask.render_template('repo_list.html', info = info, repos = repos, nav='repos')
 
 
 def do_repos_statistics():
@@ -135,7 +138,7 @@ def do_repos_statistics():
     info['size_gap'] = size_gap
     info['star_gaps'] = star_gaps
     info['size_gaps'] = size_gaps
-    return flask.render_template('repo_statistics.html',info=info)
+    return flask.render_template('repo_statistics.html',info=info,nav='repos-statistics')
 
 def do_repos_statistics_msg():
     stype = request.args.get('type')
@@ -183,7 +186,7 @@ def do_users_statistics():
             gap[k] = int(gap[k])
         if gap[k] not in gaps[k]:
             gap[k] = gaps[k][0]
-    print gap
+    #print gap
     if stype is None:
         stype = 'followers'
     info = dict()
@@ -191,8 +194,8 @@ def do_users_statistics():
     for k in keys:
         info[k] = gap[k]
         info[k+'s'] = gaps[k]
-    print info
-    return flask.render_template('user_statistics.html',info=info)
+    #print info
+    return flask.render_template('user_statistics.html',info=info,nav='users-statistics')
 
 def do_users_statistics_msg():
     stype = request.args.get('type')

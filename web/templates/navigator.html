@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title> GSA-{% block title %}{% endblock %}</title>
+		<script src="https://cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+		<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		<link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+		<script src="/static/javascript/msg.js"></script>
+		<script src="/static/javascript/navigator.js"></script>
+		<!--
+		<link href="/static/css/navigator.css" rel="stylesheet">
+		-->
+		{% block css %}
+		{% endblock %}
+		
+		{% block js %}
+		{% endblock %}
+	</head>
+	<body id="mybody">
+		<nav class="navbar navbar-default" role="navigation">
+			<div class="navbar-header" style="float:left"><span class="navbar-brand">Github Statistic Analysis</span></div>
+				<ul class="nav nav-tabs navbar-nav">
+					<li {% if nav == 'home' %} class="active" {% endif %}><a href="/home">Home</a></li>
+					<li {% if nav == 'users' %} class="active" {% endif %}><a href="/users/page">Users</a></li>
+					<li {% if nav == 'repos' %} class="active" {% endif %}><a href="/repos/page">Repos</a></li>
+					<li {% if nav == 'users-statistics' %} class="active" {% endif %}><a href="/users/statistics">Users-Statistics</a></li>
+					<li {% if nav == 'repos-statistics' %} class="active" {% endif %}><a href="/repos/statistics">Repos-Statistics</a></li>
+				</ul>
+		</nav>	
+		{% block body %}
+
+		{% endblock %}	
+	</body>
+</html>

@@ -1,63 +1,56 @@
-<!doctype html>
-<html>
-	<head>
-		<meta charset="utf-8">
-		<title>repo_list|{{ info['page'] }}</title>
-	</head>
-	<body>
-		<div>All Repos: {{ info['all_repo'] }}</div>
-		<div>Now Page: {{ info['page'] }}</div>
-		<div>Repos Per Page: {{ info['per_page'] }}</div>
-		<div>Repos This Page: {{ info['num'] }}<div>
+{% extends "navigator.html" %}
+{% block title %}Repo|{{ info['page'] }}{% endblock %}
+{% block body %}
+<div>All Repos: {{ info['all_repo'] }}</div>
+<div>Now Page: {{ info['page'] }}</div>
+<div>Repos Per Page: {{ info['per_page'] }}</div>
+<div>Repos This Page: {{ info['num'] }}<div>
 
-		<form method="GET" >
-			Order by:
-			<select name="order_type">
-				<option value="default">Default</option>
-				{% for or in info['all_order_type'] %}
-				<option value="{{ or }}" {% if or == info['order_type'] %} selected="selected" {% endif %}>{{ or }}</option>
-				{% endfor %}	
-			</select>
-			<input type="radio" name="order" value="up" {% if info['order'] == 'up' %} checked="checked"{% endif %}/> Up
-			<input type="radio" name="order" value="down" {% if info['order'] == 'down' %} checked="checked" {% endif %}/> Down
-			<br/>
-			Language:
-			<select name="language">
-				<option value="default">Default</option>
-				{% for lan in info['all_language'] %}
-					<option value="{{ lan }}" {% if lan == info['language'] %} selected="selected" {% endif %}>{{ lan }}</option>
-					
+<form method="GET" >
+	Order by:
+	<select name="order_type">
+		<option value="default">Default</option>
+		{% for or in info['all_order_type'] %}
+		<option value="{{ or }}" {% if or == info['order_type'] %} selected="selected" {% endif %}>{{ or }}</option>
+		{% endfor %}	
+	</select>
+	<input type="radio" name="order" value="up" {% if info['order'] == 'up' %} checked="checked"{% endif %}/> Up
+	<input type="radio" name="order" value="down" {% if info['order'] == 'down' %} checked="checked" {% endif %}/> Down
+	<br/>
+	Language:
+	<select name="language">
+		<option value="default">Default</option>
+		{% for lan in info['all_language'] %}
+			<option value="{{ lan }}" {% if lan == info['language'] %} selected="selected" {% endif %}>{{ lan }}</option>
+		{% endfor %}
+	</select>
+	<br/>
+	Name:<input type="text" name="name" value="{{info['name']}}">
+	<br/><input type="submit" value="Filter">
+</form>
 
-				{% endfor %}
-			</select>
-			<br/>
-			Name:<input type="text" name="name" value="{{info['name']}}">
-			<br/><input type="submit" value="Filter">
-		</form>
-
-		{% if info['page'] > 1 %}	
-			<a href="/repos/page/{{ info['page'] - 1}}?order_type={{info['order_type']}}&order={{info['order']}}&&language={{info['language']}}&&name={{info['name']}}">Pre Page</a>
-		{% endif %}
-		
-		{% if info['page'] < info['lst_page'] %}
-			<a href="/repos/page/{{ info['page'] + 1}}?order_type={{info['order_type']}}&order={{info['order']}}&&language={{info['language']}}&&name={{info['name']}}">Next Page</a>
-		{% endif %}
-		
-		<table>
-			<tr>
-				<th>Repo</th>
-				<th>Stargazers_count</th>
-				<th>Language</th>
-				<th>Size</th>
-			</tr>
-			{% for repo in repos %}
-			<tr>
-				<th><a href = "https://github.com/{{ repo['full_name'] }}">{{ repo['full_name'] }}</a></th>
-				<th>{{ repo['stargazers_count'] }}</th>
-				<th>{{ repo['language'] }}</th>
-				<th>{{ repo['size'] }}</th>
-			</tr>
-			{% endfor %}
-		</table>
-	</body>
-</html>
+{% if info['page'] > 1 %}	
+	<a href="/repos/page/{{ info['page'] - 1}}?order_type={{info['order_type']}}&order={{info['order']}}&&language={{info['language']}}&&name={{info['name']}}">Pre Page</a>
+{% endif %}
+	
+{% if info['page'] < info['lst_page'] %}
+	<a href="/repos/page/{{ info['page'] + 1}}?order_type={{info['order_type']}}&order={{info['order']}}&&language={{info['language']}}&&name={{info['name']}}">Next Page</a>
+{% endif %}
+	
+<table>
+	<tr>
+		<th>Repo</th>
+		<th>Stargazers_count</th>
+		<th>Language</th>
+		<th>Size</th>
+	</tr>
+	{% for repo in repos %}
+	<tr>
+		<th><a href = "https://github.com/{{ repo['full_name'] }}">{{ repo['full_name'] }}</a></th>
+		<th>{{ repo['stargazers_count'] }}</th>
+		<th>{{ repo['language'] }}</th>
+		<th>{{ repo['size'] }}</th>
+	</tr>
+	{% endfor %}
+</table>
+{% endblock %}

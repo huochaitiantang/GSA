@@ -1,39 +1,30 @@
-<!doctype html>
-<html>
-	<head>
-		<meta charset="utf-8">
-		<title>user_statistics</title>
-		<script src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
-		<script src="/static/javascript/msg.js"></script>
-		<script src="/static/javascript/user_statistics.js"></script>
-	</head>
-	<body>
-
-		<form method="GET">
-			<input type="radio" name="type" value="followers" {% if info['type'] == 'followers' %} checked="checked"{% endif %}>Followers
-			<select name="followers_gap">
-					{% for sg in info['followers_gaps'] %}
-					<option value="{{ sg }}" {% if sg == info['followers_gap'] %} selected="selected" {% endif %}>{{ sg }}</option>
-					{% endfor %}
-			</select>
-			<br/>
-			<input type="radio" name="type" value="public_repos" {% if info['type'] == 'public_repos' %} checked="checked"{% endif %}>Public_repos
-			<select name="public_repos_gap">
-					{% for sg in info['public_repos_gaps'] %}
-					<option value="{{ sg }}" {% if sg == info['public_repos_gap'] %} selected="selected" {% endif %}>{{ sg }}</option>
-					{% endfor %}
-			</select>
-			<br/>
-			<input type="radio" name="type" value="public_gists" {% if info['type'] == 'public_gists' %} checked="checked"{% endif %}>Public_gists
-			<select name="public_gists_gap">
-					{% for sg in info['public_gists_gaps'] %}
-					<option value="{{ sg }}" {% if sg == info['public_gists_gap'] %} selected="selected" {% endif %}>{{ sg }}</option>
-					{% endfor %}
-			</select>
-			</br><input type="submit" value="Filter">
-
-
-		</form>
-
-	</body>
-</html>
+{% extends "navigator.html" %}
+{% block title %}UserStatistics{% endblock %}
+{% block js %}
+	<script src="/static/javascript/user_statistics.js"></script>
+{% endblock %}
+{% block body %}
+<form method="GET">
+	<input type="radio" name="type" value="followers" {% if info['type'] == 'followers' %} checked="checked"{% endif %}>Followers
+	<select name="followers_gap">
+			{% for sg in info['followers_gaps'] %}
+			<option value="{{ sg }}" {% if sg == info['followers_gap'] %} selected="selected" {% endif %}>{{ sg }}</option>
+			{% endfor %}
+	</select>
+	<br/>
+	<input type="radio" name="type" value="public_repos" {% if info['type'] == 'public_repos' %} checked="checked"{% endif %}>Public_repos
+	<select name="public_repos_gap">
+			{% for sg in info['public_repos_gaps'] %}
+			<option value="{{ sg }}" {% if sg == info['public_repos_gap'] %} selected="selected" {% endif %}>{{ sg }}</option>
+			{% endfor %}
+	</select>
+	<br/>
+	<input type="radio" name="type" value="public_gists" {% if info['type'] == 'public_gists' %} checked="checked"{% endif %}>Public_gists
+	<select name="public_gists_gap">
+			{% for sg in info['public_gists_gaps'] %}
+			<option value="{{ sg }}" {% if sg == info['public_gists_gap'] %} selected="selected" {% endif %}>{{ sg }}</option>
+			{% endfor %}
+	</select>
+	</br><input type="submit" value="Filter">
+</form>
+{% endblock %}

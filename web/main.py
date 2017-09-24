@@ -3,8 +3,9 @@ import controller
 app = flask.Flask("GSA_web")
 
 @app.route('/')
-def hello_world():
-    return 'Hello World!'
+@app.route('/home')
+def home():
+    return controller.do_home()
 
 @app.route('/users/page', defaults={'page': 1})
 @app.route('/users/page/<int:page>')
