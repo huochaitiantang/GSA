@@ -103,3 +103,17 @@ function draw_text(canvas,ind,kv,x,y){
 	txt2 = "["+kv['val']+"]"
 	canvas.fillText(txt2,x-txt2.length/2*fps,y+fs*3/4);
 }
+
+function get_promise(url)
+{
+	var p = new Promise(function(resolve, reject){
+		var request = new XMLHttpRequest();
+		request.open('GET', url, true);
+		request.addEventListener("load", function(){
+			resolve(this.responseText);
+		});
+		request.send();
+	});
+	return p;
+}
+

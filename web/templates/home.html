@@ -3,10 +3,10 @@
 {% block body %}
 	<div id="bigdiv" style="background-color:#f6f6f6;padding:10px 10px 10px 10px;text-align:center;height:100%">
 		<div class="fdiv"> Basic Information In Database </div>
-		<div class="sdiv">Users : <span id="user"></span> </div>
-		<div class="sdiv">Repos : <span id="repo"></span> </div>
-		<div class="sdiv">User-Users : <span id="user_user"> </span></div>
-		<div class="sdiv">User-Repos : <span id="user_repo"> </span></div>
+		<div class="sdiv">Users : <span id="user">{{ info['user'] }}</span> </div>
+		<div class="sdiv">Repos : <span id="repo">{{ info['repo'] }}</span> </div>
+		<div class="sdiv">User-Users : <span id="user_user">{{ info['user_user'] }}</span></div>
+		<div class="sdiv">User-Repos : <span id="user_repo">{{ info['user_repo'] }}</span></div>
 	</div>
 	<script>
 		$('.fdiv').css({
@@ -25,24 +25,22 @@
 		"padding-top":"5px",
 		"padding-bottom":"5px"
 		})
-		update_data()
 
+		update_data();
+		
 		function update_data(){		
-			request = new XMLHttpRequest();
-	        	request.open('GET','/home/msg',true);
-        		request.addEventListener("load", function x()
-			{
-				if (request.readyState==4 && request.status==200){
-					ans = JSON.parse(request.responseText);
+			var p = get_promise('/home/msg');
+			p.then(
+				(res) => {
+					ans = JSON.parse(res);
 					console.log(ans)
 					$('#user').html(ans['user']);	
 					$('#repo').html(ans['repo']);	
 					$('#user_user').html(ans['user_user']);	
-					$('#user_repo').html(ans['user_repo']);	
-				}
-			}, true);
-        		request.send();
-			setTimeout(update_data,1000);
+					$('#user_repo').html(ans['user_repo']);					
+					setTimeout(update_data,1000) 
+			});
+			
 		}
 	</script>
 {% endblock %}

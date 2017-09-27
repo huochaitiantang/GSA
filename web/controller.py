@@ -7,7 +7,12 @@ import time
 import json
 
 def do_home():
-    return flask.render_template('home.html',nav='home')
+    info = {}
+    info['user'] = sql.get_num('user')
+    info['repo'] = sql.get_num('repo')
+    info['user_user'] = sql.get_num('user_user')
+    info['user_repo'] = sql.get_num('user_repo')
+    return flask.render_template('home.html',nav='home',info=info)
 
 def do_home_msg():
     info = {}
