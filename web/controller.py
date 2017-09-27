@@ -9,6 +9,15 @@ import json
 def do_home():
     return flask.render_template('home.html',nav='home')
 
+def do_home_msg():
+    info = {}
+    info['user'] = sql.get_num('user')
+    info['repo'] = sql.get_num('repo')
+    info['user_user'] = sql.get_num('user_user')
+    info['user_repo'] = sql.get_num('user_repo')
+    return json.dumps(info)
+    
+
 # show all users
 def do_users(page):
     company = request.args.get('company')

@@ -7,6 +7,10 @@ app = flask.Flask("GSA_web")
 def home():
     return controller.do_home()
 
+@app.route('/home/msg')
+def home_msg():
+    return controller.do_home_msg()
+
 @app.route('/users/page', defaults={'page': 1})
 @app.route('/users/page/<int:page>')
 def users(page):

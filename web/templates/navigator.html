@@ -7,8 +7,8 @@
 		<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 		<link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
 		<script src="/static/javascript/msg.js"></script>
-		<script src="/static/javascript/navigator.js"></script>
 		<!--
+		<script src="/static/javascript/navigator.js"></script>
 		<link href="/static/css/navigator.css" rel="stylesheet">
 		-->
 		{% block css %}
@@ -18,8 +18,8 @@
 		{% endblock %}
 	</head>
 	<body id="mybody">
-		<nav class="navbar navbar-default" role="navigation">
-			<div class="navbar-header" style="float:left"><span class="navbar-brand">Github Statistic Analysis</span></div>
+		<nav class="navbar navbar-default" role="navigation" style="margin-bottom:0px">
+			<div class="navbar-header" style="float:left"><span class="navbar-brand" disabled="true">Github Statistic Analysis</span></div>
 				<ul class="nav nav-tabs navbar-nav">
 					<li {% if nav == 'home' %} class="active" {% endif %}><a href="/home">Home</a></li>
 					<li {% if nav == 'users' %} class="active" {% endif %}><a href="/users/page">Users</a></li>
@@ -32,4 +32,8 @@
 
 		{% endblock %}	
 	</body>
+	<script>
+		$('#mybody').height(window.innerHeight - $('.navbar').height())
+	</script>
+
 </html>

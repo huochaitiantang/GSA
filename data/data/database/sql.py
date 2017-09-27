@@ -8,7 +8,7 @@ def get_conn():
 	'host': 'localhost',
 	'port': 3306,
 	'user': 'root',
-	'passwd': 'huochai',
+	'passwd': 'huochai123',
 	'db': 'gsa',
 	'charset': 'utf8'
     }
@@ -325,7 +325,20 @@ def get_num_by_gap(table_name,key,gap,equalgap):
   conn.close()
   return ans
 
-
+def get_num(table_name):
+  s = "SELECT COUNT(*) FROM %s" % (table_name)
+  conn = get_conn()
+  cursor = conn.cursor(cursorclass=MySQLdb.cursors.DictCursor)
+  #print "EXECUTE SELECT : \n" + s
+  try:
+    cursor.execute(s)
+    ans = int(cursor.fetchall()[0]['COUNT(*)'])
+  except:
+    print "SELECT ERROR"
+    ans = 0
+  cursor.close()
+  conn.close()
+  return ans
 
 
 
