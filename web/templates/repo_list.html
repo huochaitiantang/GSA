@@ -1,42 +1,52 @@
 {% extends "navigator.html" %}
 {% block title %}Repo|{{ info['page'] }}{% endblock %}
 {% block body %}
-<div>All Repos: {{ info['all_repo'] }}</div>
-<div>Now Page: {{ info['page'] }}</div>
-<div>Repos Per Page: {{ info['per_page'] }}</div>
-<div>Repos This Page: {{ info['num'] }}<div>
 
-<form method="GET" >
-	Order by:
+
+<form method="GET" style="background-color:#f6f6f6;padding:10px 10px 10px 10px;font-size:16px;color:#2a2a2a;text-align:center;border-bottom-style:dashed;border-bottom-width:1px;border-bottom-color:#ccc">
+	<span style="margin:0px 5px 0px 0px">OrderBy:</span>
 	<select name="order_type">
 		<option value="default">Default</option>
 		{% for or in info['all_order_type'] %}
 		<option value="{{ or }}" {% if or == info['order_type'] %} selected="selected" {% endif %}>{{ or }}</option>
 		{% endfor %}	
 	</select>
-	<input type="radio" name="order" value="up" {% if info['order'] == 'up' %} checked="checked"{% endif %}/> Up
-	<input type="radio" name="order" value="down" {% if info['order'] == 'down' %} checked="checked" {% endif %}/> Down
-	<br/>
-	Language:
+	<input style="margin:0px 0px 0px 5px" type="radio" name="order" value="up" {% if info['order'] == 'up' %} checked="checked"{% endif %}/>
+	<span style="font-size:25px">&uarr;</span>
+	<input style="margin:0px 0px 0px 5px" type="radio" name="order" value="down" {% if info['order'] == 'down' %} checked="checked" {% endif %}/>
+	<span style="font-size:25px">&darr;</span>
+	<span style="margin:0px 5px 0px 20px">Language:</span>
 	<select name="language">
 		<option value="default">Default</option>
 		{% for lan in info['all_language'] %}
 			<option value="{{ lan }}" {% if lan == info['language'] %} selected="selected" {% endif %}>{{ lan }}</option>
 		{% endfor %}
 	</select>
-	<br/>
-	Name:<input type="text" name="name" value="{{info['name']}}">
-	<br/><input type="submit" value="Filter">
+	<span style="margin:0px 5px 0px 20px">Name:</span>
+	<input type="text" name="name" value="{{info['name']}}">
+	<input style="margin:0px 0px 0px 20px" type="submit" value="Filter">
 </form>
 
-{% if info['page'] > 1 %}	
+<div style="background-color:#f6f6f6;padding:10px 10px 10px 10px;text-align:center;margin:0px 0px 0px 0px;border-bottom-style:dashed;border-bottom-width:1px;border-bottom-color:#ccc">
+	<span class="sspan">Filter-Count: {{ info['all_repo'] }}</span>
+	<span class="sspan">Page&nbsp;{{ info['page'] }}</span>
+	<span class="sspan">Repos-Per-Page: {{ info['per_page'] }}</span>
+</div>
+
+{% if info['page'] > 1 or info['page'] < info['lst_page'] %}
+	<div style="background-color:#f6f6f6;padding:10px 10px 10px 10px;text-align:center;margin:0px 0px 0px 0px;font-size:18px;color:#428264">
+	{% if info['page'] > 1 %}	
 	<a href="/repos/page/{{ info['page'] - 1}}?order_type={{info['order_type']}}&order={{info['order']}}&&language={{info['language']}}&&name={{info['name']}}">Pre Page</a>
-{% endif %}
-	
-{% if info['page'] < info['lst_page'] %}
+	{% endif %}
+	{% if info['page'] > 1 and info['page'] < info['lst_page'] %}
+		<span style="margin:0px 5px 0px 5px">&#124</span>
+	{% endif %}
+	{% if info['page'] < info['lst_page'] %}
 	<a href="/repos/page/{{ info['page'] + 1}}?order_type={{info['order_type']}}&order={{info['order']}}&&language={{info['language']}}&&name={{info['name']}}">Next Page</a>
+	{% endif %}
+	</div>
 {% endif %}
-	
+
 <table>
 	<tr>
 		<th>Repo</th>
@@ -53,4 +63,14 @@
 	</tr>
 	{% endfor %}
 </table>
+
+<script>
+	$('.sspan').css({
+	"color":"#4682b4",
+	"font-size":"18px",
+	"margin":"10px 10px 10px 10px",
+	"padding":"10px 10px 10px 10px"
+	})
+</script>
+
 {% endblock %}

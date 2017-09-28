@@ -1,34 +1,49 @@
 {% extends "navigator.html" %}
 {% block title %}User|{{ info['page'] }}{% endblock %}
 {% block body %}
-<div>All Users: {{ info['all_user'] }}</div>
-<div>Now Page: {{ info['page'] }}</div>
-<div>Users Per Page: {{ info['per_page'] }}</div>
-<div>Users This Page: {{ info['num'] }}<div>
-		
-<form method="GET" >
-	Order by:
+
+
+
+<form method="GET" style="background-color:#f6f6f6;padding:10px 10px 10px 10px;font-size:16px;color:#2a2a2a;text-align:center;border-bottom-style:dashed;border-bottom-width:1px;border-bottom-color:#ccc">
+	<span style="margin:0px 5px 0px 0px">OrderBy:</span>
 	<select name="order_type">
 		<option value="default">Default</option>
 		{% for or in info['all_order_type'] %}
 		<option value="{{ or }}" {% if or == info['order_type'] %} selected="selected" {% endif %}>{{ or }}</option>
 		{% endfor %}	
 	</select>
-	<input type="radio" name="order" value="up" {% if info['order'] == 'up' %} checked="checked"{% endif %}/> Up
-	<input type="radio" name="order" value="down" {% if info['order'] == 'down' %} checked="checked" {% endif %}/> Down
-	<br/>
-	Name:<input type="text" name="name" value="{{info['name']}}">
-	Company:<input type="text" name="company" value="{{info['company']}}">
-	Location:<input type="text" name="location" value="{{info['location']}}">
+	<input style="margin:0px 0px 0px 5px" type="radio" name="order" value="up" {% if info['order'] == 'up' %} checked="checked"{% endif %}/>
+	<span style="font-size:25px">&uarr;</span>
+	<input style="margin:0px 0px 0px 5px" type="radio" name="order" value="down" {% if info['order'] == 'down' %} checked="checked" {% endif %}/>
+	<span style="font-size:25px">&darr;</span>
+	<span style="margin:0px 5px 0px 20px">Name:</span>
+	<input style="width:150px" type="text" name="name" value="{{info['name']}}">
+	<span style="margin:0px 5px 0px 20px">Company:</span>
+	<input style="width:150px" type="text" name="company" value="{{info['company']}}">
+	<span style="margin:0px 5px 0px 20px">Location:</span>
+	<input style="width:150px" type="text" name="location" value="{{info['location']}}">
 	
-	<br/><input type="submit" value="Filter">
+	<input style="margin:0px 0px 0px 20px" type="submit" value="Filter">
 </form>
 
-{% if info['page'] > 1 %}	
-	<a href="/users/page/{{ info['page'] - 1}}?order_type={{info['order_type']}}&order={{info['order']}}&&company={{info['company']}}&&location={{info['location']}}&&name={{info['name']}}">Pre Page</a>
-{% endif %}
-{% if info['page'] < info['lst_page'] %}
-	<a href="/users/page/{{ info['page'] + 1}}?order_type={{info['order_type']}}&order={{info['order']}}&&company={{info['company']}}&&location={{info['location']}}&&name={{info['name']}}">Next Page</a>
+<div style="background-color:#f6f6f6;padding:10px 10px 10px 10px;text-align:center;margin:0px 0px 0px 0px;border-bottom-style:dashed;border-bottom-width:1px;border-bottom-color:#ccc">
+	<span class="sspan">Filter-Count: {{ info['all_user'] }}</span>
+	<span class="sspan">Page&nbsp;{{ info['page'] }}</span>
+	<span class="sspan">Users-Per-Page: {{ info['per_page'] }}</span>
+</div>
+
+{% if info['page'] > 1 or info['page'] < info['lst_page'] %}
+	<div style="background-color:#f6f6f6;padding:10px 10px 10px 10px;text-align:center;margin:0px 0px 0px 0px;font-size:18px;color:#428264">
+	{% if info['page'] > 1 %}	
+		<a href="/users/page/{{ info['page'] - 1}}?order_type={{info['order_type']}}&order={{info['order']}}&&company={{info['company']}}&&location={{info['location']}}&&name={{info['name']}}">Pre Page</a>
+	{% endif %}
+	{% if info['page'] > 1 and info['page'] < info['lst_page'] %}
+		<span style="margin:0px 5px 0px 5px">&#124</span>
+	{% endif %}
+	{% if info['page'] < info['lst_page'] %}
+		<a href="/users/page/{{ info['page'] + 1}}?order_type={{info['order_type']}}&order={{info['order']}}&&company={{info['company']}}&&location={{info['location']}}&&name={{info['name']}}">Next Page</a>
+	{% endif %}
+	</div>
 {% endif %}
 		
 <table>
@@ -51,4 +66,14 @@
 	</tr>
 	{% endfor %}
 </table>
+
+<script>
+	$('.sspan').css({
+	"color":"#4682b4",
+	"font-size":"18px",
+	"margin":"10px 10px 10px 10px",
+	"padding":"10px 10px 10px 10px"
+	})
+</script>
+
 {% endblock %}

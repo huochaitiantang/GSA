@@ -4,27 +4,31 @@
 	<script src="/static/javascript/user_statistics.js"></script>
 {% endblock %}
 {% block body %}
-<form method="GET">
-	<input type="radio" name="type" value="followers" {% if info['type'] == 'followers' %} checked="checked"{% endif %}>Followers
+<form method="GET" style="background-color:#f6f6f6;padding:10px 10px 10px 10px;font-size:16px;color:#2a2a2a;text-align:center;border-bottom-style:dashed;border-bottom-width:1px;border-bottom-color:#ccc">
+	<span style="font-size:20px;color:#4682b4">StatisticsBy:</span>
+	<input style="margin-left:15px" type="radio" name="type" value="followers" {% if info['type'] == 'followers' %} checked="checked"{% endif %}>
+	<span style="margin:0px 5px 0px 0px">Followers</span>
 	<select name="followers_gap">
 			{% for sg in info['followers_gaps'] %}
 			<option value="{{ sg }}" {% if sg == info['followers_gap'] %} selected="selected" {% endif %}>{{ sg }}</option>
 			{% endfor %}
 	</select>
-	<br/>
-	<input type="radio" name="type" value="public_repos" {% if info['type'] == 'public_repos' %} checked="checked"{% endif %}>Public_repos
+	
+	<input style="margin-left:20px" type="radio" name="type" value="public_repos" {% if info['type'] == 'public_repos' %} checked="checked"{% endif %}>
+	<span style="margin:0px 5px 0px 0px">Public-Repos</span>
 	<select name="public_repos_gap">
 			{% for sg in info['public_repos_gaps'] %}
 			<option value="{{ sg }}" {% if sg == info['public_repos_gap'] %} selected="selected" {% endif %}>{{ sg }}</option>
 			{% endfor %}
 	</select>
-	<br/>
-	<input type="radio" name="type" value="public_gists" {% if info['type'] == 'public_gists' %} checked="checked"{% endif %}>Public_gists
+	
+	<input style="margin-left:20px" type="radio" name="type" value="public_gists" {% if info['type'] == 'public_gists' %} checked="checked"{% endif %}>
+	<span style="margin:0px 5px 0px 0px">Public-Gists</span>
 	<select name="public_gists_gap">
 			{% for sg in info['public_gists_gaps'] %}
 			<option value="{{ sg }}" {% if sg == info['public_gists_gap'] %} selected="selected" {% endif %}>{{ sg }}</option>
 			{% endfor %}
 	</select>
-	</br><input type="submit" value="Filter">
+	<input style="margin:0px 0px 0px 20px" type="submit" value="Filter">
 </form>
 {% endblock %}
