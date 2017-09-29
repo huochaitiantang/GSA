@@ -25,6 +25,43 @@
 			{% endfor %}
 	</select>
 	
-	<input style="margin:0px 0px 0px 20px" type="submit" value="Filter">
+	<input class="input-submit" style="margin:0px 0px 0px 20px" type="submit" value="Filter">
 </form>
+<style>
+select,.input-text {
+	background-color: #fbfbfb;
+	border: 1px solid #a7a7a7;
+	height: 30px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+	cursor: pointer;
+}
+
+select:focus,.input-text:focus {
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+	border: 2px solid #94c1e7;
+	outline: none;
+}
+
+.input-submit{
+	background-color: #fbfbfb;
+	color: 	#4682b4;
+	font-size: 18px;
+	font-style: bold;
+	border: 1px solid #a7a7a7;
+	height: 30px;
+	width: 100px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+}
+
+.input-submit:hover{
+	background-color: #94c1e7;
+	color: 	#fbfbfb;
+}
+</style>
 {% endblock %}
