@@ -6,7 +6,7 @@ import scrapy
 import time
 import itertools
 from scrapy import Request
-
+import random
 ''' 
     Common method for getting a relationship based on the single
     Each method need a param s that represents a spider object
@@ -17,11 +17,12 @@ token_list = [
 ]
 token_iter = itertools.cycle(token_list)
 handle_httpstatus_list = [401,403,404,451,422]
-time_inter = 1000
+time_inter = 60
 
 def init_all_item(s):
     print "Init items data..."
-    s.all_item = sql.select(s.src_table, s.src_key)
+    s.all_item = list(sql.select(s.src_table, s.src_key))
+    random.shuffle(s.all_item)
     s.cur_item_ind = 0
     s.cur_item = s.all_item[s.cur_item_ind][s.src_key[0]]
     s.des_val[s.des_key[0]] = s.cur_item

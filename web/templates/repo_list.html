@@ -23,8 +23,8 @@
 		{% endfor %}
 	</select>
 	<span style="margin:0px 5px 0px 20px">Name:</span>
-	<input type="text" name="name" value="{{info['name']}}">
-	<input style="margin:0px 0px 0px 20px" type="submit" value="Filter">
+	<input class="input-text" type="text" name="name" value="{{info['name']}}">
+	<input class="input-submit" style="margin:0px 0px 0px 20px" type="submit" value="Filter">
 </form>
 
 <div style="background-color:#f6f6f6;padding:10px 10px 10px 10px;text-align:center;margin:0px 0px 0px 0px;border-bottom-style:dashed;border-bottom-width:1px;border-bottom-color:#ccc">
@@ -34,7 +34,7 @@
 </div>
 
 {% if info['page'] > 1 or info['page'] < info['lst_page'] %}
-	<div style="background-color:#f6f6f6;padding:10px 10px 10px 10px;text-align:center;margin:0px 0px 0px 0px;font-size:18px;color:#428264">
+	<div style="background-color:#f6f6f6;padding:10px 10px 0px 10px;text-align:center;margin:0px 0px 0px 0px;font-size:18px;color:#428264">
 	{% if info['page'] > 1 %}	
 	<a href="/repos/page/{{ info['page'] - 1}}?order_type={{info['order_type']}}&order={{info['order']}}&&language={{info['language']}}&&name={{info['name']}}">Pre Page</a>
 	{% endif %}
@@ -47,30 +47,77 @@
 	</div>
 {% endif %}
 
-<table>
-	<tr>
-		<th>Repo</th>
-		<th>Stargazers_count</th>
-		<th>Language</th>
-		<th>Size</th>
-	</tr>
-	{% for repo in repos %}
-	<tr>
-		<th><a href = "https://github.com/{{ repo['full_name'] }}">{{ repo['full_name'] }}</a></th>
-		<th>{{ repo['stargazers_count'] }}</th>
-		<th>{{ repo['language'] }}</th>
-		<th>{{ repo['size'] }}</th>
-	</tr>
-	{% endfor %}
-</table>
+<div style="padding:0px 50px 0px 50px;background-color:#f7f7f7">
+	<table class="table table-striped">
+		<thead>
+			<tr>
+			<th>No.</th>
+			<th>Repositories</th>
+			<th>Stars</th>
+			<th>Language</th>
+			<th>Size</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% set base = (info['page'] - 1) * info['per_page'] %}
+			{% for repo in repos %}
+			<tr>
+				<td>{{ base + loop.index }}</td>
+				<td><a href = "https://github.com/{{ repo['full_name'] }}">{{ repo['full_name'] }}</a></td>
+				<td>{{ repo['stargazers_count'] }}</td>
+				<td>{{ repo['language'] }}</td>
+				<td>{{ repo['size'] }}</td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+</div>
 
-<script>
-	$('.sspan').css({
-	"color":"#4682b4",
-	"font-size":"18px",
-	"margin":"10px 10px 10px 10px",
-	"padding":"10px 10px 10px 10px"
-	})
-</script>
+<style>  
+.table>tbody>tr:hover {  
+	background-color: #e0eeee;  
+}
+.sspan {
+	color: #4682b4;
+	font-size: 18px;
+	margin: 10px 10px 10px 10px;
+	padding: 10px 10px 10px 10px;
+}
+select,.input-text {
+	background-color: #fbfbfb;
+	border: 1px solid #a7a7a7;
+	height: 30px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+	cursor: pointer;
+}
 
+select:focus,.input-text:focus {
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+	border: 2px solid #94c1e7;
+	outline: none;
+}
+
+.input-submit{
+	background-color: #fbfbfb;
+	color: 	#4682b4;
+	font-size: 18px;
+	font-style: bold;
+	border: 1px solid #a7a7a7;
+	height: 30px;
+	width: 100px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+}
+
+.input-submit:hover{
+	background-color: #94c1e7;
+	color: 	#fbfbfb;
+}
+
+</style>
 {% endblock %}
