@@ -19,14 +19,15 @@
 	</head>
 	<body id="mybody">
 		<nav class="navbar navbar-default" role="navigation" style="margin-bottom:0px;font-size:18px">
-			<div class="navbar-header" style="float:left"><span class="navbar-brand" disabled="true">Github Statistic Analysis</span></div>
-				<ul class="nav nav-tabs navbar-nav">
-					<li {% if nav == 'home' %} class="active" {% endif %}><a href="/home">Home</a></li>
-					<li {% if nav == 'users' %} class="active" {% endif %}><a href="/users/page">Users</a></li>
-					<li {% if nav == 'repos' %} class="active" {% endif %}><a href="/repos/page">Repos</a></li>
-					<li {% if nav == 'users-statistics' %} class="active" {% endif %}><a href="/users/statistics">Users-Statistics</a></li>
-					<li {% if nav == 'repos-statistics' %} class="active" {% endif %}><a href="/repos/statistics">Repos-Statistics</a></li>
-				</ul>
+			<div id="img"><img src="/static/picture/github.jpeg" width=50 height=50></div>
+			<div class="navbar-header" style="float:left;display:inline;"><span class="navbar-brand" disabled="true" style="font-size:19px;font-style:italic;background-color:#fefefe;padding-right:20px">Github Statistic Analysis</span></div>
+			<ul class="nav nav-tabs navbar-nav">
+				<li {% if nav == 'home' %} class="active" {% endif %}><a href="/home">Home</a></li>
+				<li {% if nav == 'users' %} class="active" {% endif %}><a href="/users/page">Users</a></li>
+				<li {% if nav == 'repos' %} class="active" {% endif %}><a href="/repos/page">Repos</a></li>
+				<li {% if nav == 'users-statistics' %} class="active" {% endif %}><a href="/users/statistics">Users-Statistics</a></li>
+				<li {% if nav == 'repos-statistics' %} class="active" {% endif %}><a href="/repos/statistics">Repos-Statistics</a></li>
+			</ul>
 		</nav>	
 		{% block body %}
 
@@ -35,5 +36,13 @@
 	<script>
 		$('#mybody').height(window.innerHeight - $('.navbar').height())
 	</script>
+	<style>
+		#img{	
+			padding-left: 10px;
+			display: inline;
+			float: left;
+			background-color: #fefefe;
+		}
+	</style>
 
 </html>

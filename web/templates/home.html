@@ -1,33 +1,48 @@
 {% extends "navigator.html" %}
 {% block title %}Home{% endblock %}
 {% block body %}
-	<div id="bigdiv" style="background-color:#f6f6f6;padding:10px 10px 10px 10px;text-align:center;height:100%">
-		<div class="fdiv"> Basic Information In Database </div>
-		<div class="sdiv">Users : <span id="user">{{ info['user'] }}</span> </div>
-		<div class="sdiv">Repos : <span id="repo">{{ info['repo'] }}</span> </div>
-		<div class="sdiv">User-Users : <span id="user_user">{{ info['user_user'] }}</span></div>
-		<div class="sdiv">User-Repos : <span id="user_repo">{{ info['user_repo'] }}</span></div>
+	<div style="background-color:#f6f6f6;padding:100px 10px 10px 10px;text-align:center;height:100%">
+		<div id="bdiv">
+			<div class="fdiv"> Information Of Database </div>
+			<div class="sdiv">Users      : <span id="user">{{ info['user'] }}</span> </div>
+			<div class="sdiv">Repos      : <span id="repo">{{ info['repo'] }}</span> </div>
+			<div class="sdiv">User-Users : <span id="user_user">{{ info['user_user'] }}</span></div>
+			<div class="sdiv">User-Repos : <span id="user_repo">{{ info['user_repo'] }}</span></div>
+		</div>
 	</div>
-	<script>
-		$('.fdiv').css({
-		"color":"black",
-		"font-size":"30px",
-		"margin-top":"20px",
-		"margin-bottom":"10px",
-		"padding-top":"10px",
-		"padding-bottom":"10px"
-		})
-		$('.sdiv').css({
-		"color":"#4682b4",
-		"font-size":"25px",
-		"margin-top":"5px",
-		"margin-bottom":"5px",
-		"padding-top":"5px",
-		"padding-bottom":"5px"
-		})
-
-		update_data();
+	<style>
+		#bdiv{
+			width: 380px;
+			text-align: center;
+			margin: 0 auto;
+			background-color: #fafafa;
+			padding: 10px 20px 20px 20px;
+			border: 2px solid #a7a7a7;
+			-moz-border-radius: 25px;
+			-webkit-border-radius: 25px;
+			border-radius: 25px;
+		}
+		.fdiv{
+			color: #373737;
+			font-size: 25px;
+			margin: 0px 0px 0px 0px;
+			padding: 10px 0px 5px 0px;
+		}
 		
+		.sdiv{
+			color: #4682b4;
+			font-size: 22px;
+			margin: 0px 30px 0px 30px;
+			padding: 2px 0px 2px 0px;
+			border-bottom-style: dashed;
+			border-bottom-width: 2px;
+			border-bottom-color: #ccc;
+		}
+
+	</style>
+	
+	<script>
+		update_data();
 		function update_data(){		
 			var p = get_promise('/home/msg');
 			p.then(
