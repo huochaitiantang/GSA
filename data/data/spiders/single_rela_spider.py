@@ -7,6 +7,7 @@ import time
 import itertools
 from scrapy import Request
 import random
+import sqs_send
 ''' 
     Common method for getting a relationship based on the single
     Each method need a param s that represents a spider object
@@ -72,9 +73,11 @@ def yield_request(s):
 # method for handling the data back from the request
 def do_item_parse(s, res):
     relas = json.loads(res.body_as_unicode())
+    s.des_val[s.des_key[1]] = []
     for rela in relas:
-        s.des_val[s.des_key[1]] = rela[s.rela_key]
-        sql.insert(s.des_table, s.des_val) 
+        s.des_val[s.des_key[1]].append(rela[s.rela_key])
+    sqs_send.send(s.des_table,s.des_val,'single_rela',s.des_key[0],s.des_key[1])
+        #sql.insert(s.des_table, s.des_val) 
     s.rela_num += len(relas)
     if len(relas) == s.per_page:
         s.page_num += 1

@@ -7,6 +7,7 @@ import time
 import itertools
 from scrapy import Request
 import random
+import sqs_send
 '''	
     Common method for getting a signle items based on the relationship file
     Each method need a param s that represents a spider object
@@ -65,7 +66,8 @@ def do_item_parse(s, res):
         s.des_val[s.des_key[i]] = user[s.des_key[i]]
     for i in range(len(s.des_2key)):
         s.des_val[s.des_2key[i]] = user[s.res_1key[i]][s.res_2key[i]]
-    sql.insert(s.des_table, s.des_val)
+    sqs_send.send(s.des_table, s.des_val,'rela_single',None,None)
+    #sql.insert(s.des_table, s.des_val)
 
 # method for handling for error
 def handle_error(s, res):
