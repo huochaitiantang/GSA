@@ -2,16 +2,17 @@
 # -*- coding: UTF-8 -*-
 import MySQLdb
 import re
+import os
 
 def get_conn():
     config = {
 	'host': 'localhost',
 	'port': 3306,
-	'user': 'root',
-	'passwd': 'huochai123',
 	'db': 'gsa',
 	'charset': 'utf8'
     }
+    config['user'] = os.environ['MYSQL_USER']
+    config['passwd'] = os.environ['MYSQL_PWD']
     conn = MySQLdb.connect(**config)
     return conn
 

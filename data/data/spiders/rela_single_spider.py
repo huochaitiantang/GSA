@@ -8,24 +8,31 @@ import itertools
 from scrapy import Request
 import random
 import sqs_send
+import os
 '''	
     Common method for getting a signle items based on the relationship file
     Each method need a param s that represents a spider object
 '''
 
-token_list = [
-''' Put your own token list here '''
-]
+token_list = os.environ['GITHUB_TOKENS'].split(':')
+
 token_iter = itertools.cycle(token_list)
 handle_httpstatus_list = [401,403,404,451,422]
 time_inter = 60
 
 def init_all_item(s):
     print "Init items data..."
-    s.all_item = list(sql.select(s.src_table, s.src_key))
+    res = sql.select(s.src_table, s.src_key)
+    if res:
+        s.all_item = list(res)
+    else:
+        s.all_item = []
+        print "No Data, wait for 5 s"
+        time.sleep(5)
     random.shuffle(s.all_item)
     s.cur_item_ind = 0
-    s.cur_item = s.all_item[s.cur_item_ind][s.src_key[0]]
+    if(s.cur_item_ind < len(s.all_item)):
+        s.cur_item = s.all_item[s.cur_item_ind][s.src_key[0]]
     sql.delete(s.des_table, s.des_key[0], s.cur_item)
 
 def get_next_item(s):
